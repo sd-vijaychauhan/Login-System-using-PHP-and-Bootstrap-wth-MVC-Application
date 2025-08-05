@@ -1,0 +1,154 @@
+
+## Breakdown of MVC of this Project.
+
+1. MVC Components
+Models (models)
+Contains User.php which handles data and business logic
+Responsible for:
+Database operations
+Data validation
+Business rules
+
+<?php
+// Example from User.php
+class User {
+    private $conn;
+    // Methods that handle data
+    public function register() { ... }
+    public function login() { ... }
+    public function getUserById() { ... }
+}
+
+
+Views (views)
+Contains HTML templates with PHP
+Organized in subdirectories:
+auth/ - login and register forms
+layouts/ - header and footer templates
+Home/ - dashboard and index pages
+
+
+<?php
+// Example structure
+views/
+├── auth/
+│   ├── login.php
+│   └── register.php
+├── layouts/
+│   ├── header.php
+│   └── footer.php
+└── Home/
+    ├── dashboard.php
+    └── index.php
+
+Controllers (controllers)
+Handle user requests and control flow
+Two main controllers:
+AuthController.php - Handles authentication
+HomeController.php - Handles main pages
+
+
+<?php
+// Example from AuthController.php
+class AuthController {
+    private $user;
+    
+    public function login() { ... }
+    public function register() { ... }
+}
+
+
+
+
+2. Flow of Control
+Entry Point (index.php):
+
+
+<?php
+// Request handling
+$action = isset($_GET['action']) ? $_GET['action'] : 'home';
+switch($action) {
+    case 'login':
+        $authController->login();
+        break;
+    // ...
+}
+
+Controller:
+
+<?php
+// AuthController.php
+public function login() {
+    // 1. Process form data
+    // 2. Use Model to validate
+    // 3. Render appropriate View
+    $userData = $this->user->login();
+    include 'views/auth/login.php';
+}
+
+
+Model:
+
+
+<?php
+// User.php
+public function login() {
+    // Handle database operations
+    $query = "SELECT * FROM users...";
+    return $result;
+}
+
+View
+
+<?php
+// views/auth/login.php
+<form method="POST">
+    <?php if(isset($error)): ?>
+        <div class="alert"><?php echo $error; ?></div>
+    <?php endif; ?>
+    // Form elements
+</form>
+
+
+Key Concepts
+Separation of Concerns
+
+Models: Data and business logic
+Views: Presentation
+Controllers: Request handling and flow control
+URL Structure
+
+<?php
+index.php?action=login    // Shows login form
+index.php?action=register // Shows registration form
+index.php?action=dashboard // Shows dashboard
+
+
+Session Management
+
+
+<?php
+// config/database.php handles database connectivity
+class Database {
+    public function getConnection() {
+        // Establish PDO connection
+    }
+}
+
+
+File Dependencies
+
+index.php
+  ├── AuthController.php
+  │     ├── User.php
+  │     └── database.php
+  └── HomeController.php
+        ├── User.php
+        └── database.php
+
+This MVC structure makes the code:
+
+Organized and maintainable
+Easy to modify individual components
+Secure with proper separation of concerns
+Scalable for adding new features
